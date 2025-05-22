@@ -80,5 +80,19 @@ if __name__ == '__main__':
         print("🟢 新しいコメントなし")
 
     save_seen_comments(current_comments)
+print("✅ コメントチェック開始")
+
+for acc in accounts:
+    print(f"🔍 チェック中のユーザー名: {acc['username']}")
+
+video_url = get_latest_video_url()
+print(f"🎥 取得した動画URL: {video_url}")
+
+if not video_url:
+    print("⚠️ 動画が見つかりません")
+    exit()
+
+# 後続の処理のログ（必要に応じて）
+print("💬 コメント取得開始")
 
 
