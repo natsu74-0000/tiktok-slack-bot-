@@ -98,18 +98,19 @@ if __name__ == '__main__':
     new_comments = [c for c in current_comments if c not in seen_comments]
 
     if is_9am():
-        print("☀ 朝9時：夜間のコメントを通知中")
-        night_comments = load_night_buffer()
-        for c in night_comments:
-            send_slack_notification(c)
-        clear_night_buffer()
-    elif is_night_time():
-        print("🌙 夜間：通知は保留")
-        buffer = load_night_buffer()
-        buffer.extend(new_comments)
-        save_night_buffer(buffer)
-    else:
-        for c in new_comments:
-            send_slack_notification(c)
+    print("☀ 朝9時：夜間のコメントを通知中")
+    night_comments = load_night_buffer()
+    for c in night_comments:
+        send_slack_notification(c)
+    clear_night_buffer()
+elif is_night_time():
+    print("🌙 夜間：通知は保留")
+    buffer = load_night_buffer()
+    buffer.extend(new_comments)
+    save_night_buffer(buffer)
+else:
+    for c in new_comments:
+        send_slack_notification(c)
+
 
     save_seen_comments(current_comments)
