@@ -94,5 +94,8 @@ if not video_url:
 
 # 後続の処理のログ（必要に応じて）
 print("💬 コメント取得開始")
+print(f"👤 対象アカウント: {acc['username']}")
+video_url = get_latest_video_url(acc['username'])
+print(f"🎥 取得された動画URL: {video_url}")
 
 
