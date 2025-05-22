@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-# Slack Webhook URL（あなたのURL）
+# Slack Webhook URL
 SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
 
 # TikTokの対象ユーザー
@@ -15,23 +15,26 @@ SEEN_COMMENTS_FILE = 'seen_comments.txt'
 
 def get_latest_video_url():
     url = f'https://www.tiktok.com/@{USERNAME}'
+    print(f"🌐 TikTokプロフィールを開く: {url}")
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(options=options)
     driver.get(url)
-    time.sleep(5)  # 読み込み待ち
+    time.sleep(5)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     video_links = soup.find_all('a', href=True)
     for link in video_links:
         href = link['href']
         if f'/@{USERNAME}/video/' in href:
+            print(f"🎥 見つかった動画URL: {href}")
             return href
     return None
 
 def get_comments(video_url):
+    print(f"💬 コメント取得中: {video_url}")
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
@@ -63,11 +66,11 @@ def send_slack_notification(comment):
 if __name__ == '__main__':
     print("✅ コメントチェック開始")
     video_url = get_latest_video_url()
+
     if not video_url:
         print("⚠️ 動画が見つかりません")
         exit()
 
-    print(f"🎥 対象動画: {video_url}")
     seen_comments = load_seen_comments()
     current_comments = get_comments(video_url)
 
@@ -80,22 +83,3 @@ if __name__ == '__main__':
         print("🟢 新しいコメントなし")
 
     save_seen_comments(current_comments)
-print("✅ コメントチェック開始")
-
-for acc in accounts:
-    print(f"🔍 チェック中のユーザー名: {acc['username']}")
-
-video_url = get_latest_video_url()
-print(f"🎥 取得した動画URL: {video_url}")
-
-if not video_url:
-    print("⚠️ 動画が見つかりません")
-    exit()
-
-# 後続の処理のログ（必要に応じて）
-print("💬 コメント取得開始")
-print(f"👤 対象アカウント: {acc['username']}")
-video_url = get_latest_video_url(acc['username'])
-print(f"🎥 取得された動画URL: {video_url}")
-
-
