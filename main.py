@@ -26,11 +26,14 @@ def get_latest_video_url():
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
     video_links = soup.find_all('a', href=True)
-    for link in video_links:
-        href = link['href']
-        if f'/@{USERNAME}/video/' in href:
-            print(f"🎥 見つかった動画URL: {href}")
-            return href
+　　print(f"🔗 取得したリンク数: {len(video_links)}")
+　　for link in video_links:
+   　　 href = link['href']
+  　　  print(f"▶️ リンク発見: {href}")
+ 　　   if f'/@{USERNAME}/video/' in href:
+     　   print(f"🎥 見つかった動画URL: {href}")
+       　 return href
+
     return None
 
 def get_comments(video_url):
